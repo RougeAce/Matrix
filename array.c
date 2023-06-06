@@ -2,6 +2,16 @@
 #include <stdlib.h>  // Include the <stdlib.h> header
 #include "create_array.h"
 
+int** create_matrix(int matrix_columns, int matrix_rows) {
+    int** matrix = malloc(matrix_columns * sizeof(int*));
+
+    for (int i = 0; i < matrix_columns; i++) {
+        matrix[i] = create_array(matrix_rows);
+    }
+
+    return matrix;
+}
+
 int* create_array(int array_length) {
     int* array = malloc(array_length * sizeof(int));
     int x;
@@ -14,6 +24,35 @@ int* create_array(int array_length) {
     
     return array;
 }
+
+int** add_matrix(const int** matrix1, const int** matrix2, int rows, int columns) {
+    int** result_matrix = malloc(rows * sizeof(int*));
+
+    for (int i = 0; i < rows; i++) {
+        result_matrix[i] = malloc(columns * sizeof(int));
+
+        for (int j = 0; j < columns; j++) {
+            result_matrix[i][j] = matrix1[i][j] + matrix2[i][j];
+        }
+    }
+
+    return result_matrix;
+}
+
+int** sub_matrix(const int** matrix1, const int** matrix2, int rows, int columns) {
+    int** result_matrix = malloc(rows * sizeof(int*));
+
+    for (int i = 0; i < rows; i++) {
+        result_matrix[i] = malloc(columns * sizeof(int));
+
+        for (int j = 0; j < columns; j++) {
+            result_matrix[i][j] = matrix1[i][j] - matrix2[i][j];
+        }
+    }
+
+    return result_matrix;
+}
+
 
 int* add_vector(const int array1[], const int array2[], int length) {
     int* result_array = malloc(length * sizeof(int));
@@ -35,21 +74,39 @@ int* sub_vector(const int array1[], const int array2[], int length) {
     return result_array;
 }
 
-int main(void) {
-    int* array_1 = create_array(6);
+int main() {
 
-    int* array_2 = create_array(6);
+    int x, y;
 
-    int* result = sub_vector(array_1, array_2, 6);  // Fix the function call and provide the correct length
+    printf("How many rows would you like: ");
+    scanf("%d", &x);
 
-    for (int i = 0; i < 6; i++) {  // Fix the loop variable declaration
-        printf("%d ", result[i]);
+    printf("How many columns would you like: ");
+    scanf("%d", &y);
+
+    int matrix_columns = x;
+    int matrix_rows = y;
+
+    int** matrix = create_matrix(matrix_columns, matrix_rows);
+
+    int** matrix2 = create_matrix(matrix_columns, matrix_rows);
+
+    int** answer = add_matrix(matrix, matrix2, x, y);
+
+    // Print the resulting matrix
+    printf("Resulting Matrix:\n");
+    for (int i = 0; i < matrix_rows; i++) {
+        for (int j = 0; j < matrix_columns; j++) {
+            printf("%d ", answer[i][j]);
+        }
+        printf("\n");
     }
-    printf("\n");
 
-    free(array_1);  // Free the dynamically allocated memory
-    free(array_2);
-    free(result);
+    free(matrix);
+    free(matrix2);
+    free(answer);
+
+    
 
     return 0;
 }
